@@ -60,7 +60,10 @@ void main(void){
 	TIM0_voidSetDelayAsynch_ms(100,TIM0_DELAY_CONTINUOUS);		// every 100ms we get the keypad reading
 	TIM0_voidStart();
 	TIM2_voidStart();
-
+	// simulating that it's first time eeprom is used (all memory locations have a value of 0xFF)
+	// EX_EEPROM_voidWriteByte(APP_FIRST_TIME_FLAG_ADDRESS,0xFF);
+	local_uint8firstTimeFlag=EX_EEPROM_uint8ReadByte(APP_FIRST_TIME_FLAG_ADDRESS);
+	
 	while(1){
 
 		if(private_APPuint8KeypadReading!=KEYPAD_KEY_NOT_PRESSED){
@@ -80,16 +83,12 @@ void main(void){
 			LCD_voidGoToLocation(1,8);
 			LCD_voidWriteString("ADCS");
 			LCD_voidGoToLocation(2,0);
-
-			// simulating that it's first time eeprom is used (all memory locations have a value of 0xFF)
-			// EX_EEPROM_voidWriteByte(APP_FIRST_TIME_FLAG_ADDRESS,0xFF);
-			
-			local_uint8firstTimeFlag=EX_EEPROM_uint8ReadByte(APP_FIRST_TIME_FLAG_ADDRESS);
 			
 			if(local_uint8firstTimeFlag!=0){							// first time entrance
 
 				EX_EEPROM_voidWriteByte(APP_FIRST_TIME_FLAG_ADDRESS,0);					// clearing the flag in its EEPROM memory location
-
+				local_uint8firstTimeFlag=0;
+				
 				LCD_voidWriteString("Create Your Password");
 				LCD_voidGoToLocation(3,0);
 				LCD_voidWriteString("> ");
