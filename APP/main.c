@@ -81,10 +81,14 @@ void main(void){
 			LCD_voidWriteString("ADCS");
 			LCD_voidGoToLocation(2,0);
 
+			// simulating that it's first time eeprom is used (all memory locations have a value of 0xFF)
+			// EX_EEPROM_voidWriteByte(APP_FIRST_TIME_FLAG_ADDRESS,0xFF);
+			
 			local_uint8firstTimeFlag=EX_EEPROM_uint8ReadByte(APP_FIRST_TIME_FLAG_ADDRESS);
-			if(local_uint8firstTimeFlag!=0){
+			
+			if(local_uint8firstTimeFlag!=0){							// first time entrance
 
-				EX_EEPROM_voidWriteByte(APP_FIRST_TIME_FLAG_ADDRESS,0);					// first time entrance
+				EX_EEPROM_voidWriteByte(APP_FIRST_TIME_FLAG_ADDRESS,0);					// clearing the flag in its EEPROM memory location
 
 				LCD_voidWriteString("Create Your Password");
 				LCD_voidGoToLocation(3,0);
